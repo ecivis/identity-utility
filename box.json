@@ -1,0 +1,44 @@
+{
+    "name":"Identity Utility",
+    "author":"Joseph lamoree <jlamoree@ecivis.com>",
+    "version":"1.0.0",
+    "slug":"identity-utility",
+    "type":"modules",
+    "homepage":"https://github.com/ecivis/identity-utility",
+    "documentation":"https://github.com/ecivis/identity-utility",
+    "repository":{
+        "type":"git",
+        "url":"https://github.com/ecivis/identity-utility"
+    },
+    "shortDescription":"A utility to assist in creating and converting unique identities.",
+    "bugs":"https://github.com/ecivis/identity-utility/issues",
+    "engines":[
+        {
+            "type":"lucee",
+            "version":">=4.5.0"
+        },
+        {
+            "type":"adobe",
+            "version":">=10.0.0"
+        }
+    ],
+    "license":[
+        {
+            "type":"MIT",
+            "url":""
+        }
+    ],
+    "dependencies":{
+    },
+    "devDependencies":{
+        "testbox":"2.3.0",
+    },
+    "ignore":[
+        "**/.*",
+        "tests",
+        "apidocs"
+    ],
+    "installPaths":{
+        "testbox":"testbox"
+    }
+}
