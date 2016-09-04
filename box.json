@@ -4,6 +4,7 @@
     "version":"1.0.0",
     "slug":"identity-utility",
     "type":"modules",
+    "location":"ecivis/identity-utility",
     "homepage":"https://github.com/ecivis/identity-utility",
     "documentation":"https://github.com/ecivis/identity-utility",
     "repository":{
@@ -29,9 +30,10 @@
         }
     ],
     "dependencies":{
+
     },
     "devDependencies":{
-        "testbox":"2.3.0",
+        "testbox":"2.3.0"
     },
     "ignore":[
         "**/.*",
