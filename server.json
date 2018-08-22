@@ -1,0 +1,7 @@
+{
+    "app":{
+        "cfengine":"lucee@5.2"
+    },
+    "openbrowser":"false",
+    "name":"IdentityUtilityTests"
+}

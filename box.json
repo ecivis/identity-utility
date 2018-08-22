@@ -1,17 +1,17 @@
 {
     "name":"Identity Utility",
     "author":"Joseph lamoree <jlamoree@ecivis.com>",
-    "version":"1.0.0",
+    "version":"1.1.0",
     "slug":"identity-utility",
     "type":"modules",
-    "location":"ecivis/identity-utility",
+    "location":"ecivis/identity-utility#v1.1.0",
     "homepage":"https://github.com/ecivis/identity-utility",
     "documentation":"https://github.com/ecivis/identity-utility",
     "repository":{
         "type":"git",
         "url":"https://github.com/ecivis/identity-utility"
     },
-    "shortDescription":"A utility to assist in creating and converting unique identities.",
+    "shortDescription":"A utility to assist in creating, converting, and validating unique identities.",
     "bugs":"https://github.com/ecivis/identity-utility/issues",
     "engines":[
         {
@@ -33,7 +33,8 @@
 
     },
     "devDependencies":{
-        "testbox":"2.3.0"
+        "testbox":"^2.8.0",
+        "commandbox-docbox":"^1.3.2"
     },
     "ignore":[
         "**/.*",
@@ -42,5 +43,18 @@
     ],
     "installPaths":{
         "testbox":"testbox"
+    },
+    "scripts":{
+        "generate-docs":"rm recurse=true force=true path=apidocs && docbox generate source=models mapping=models strategy-outputDir=apidocs strategy-projectTitle='Identity Utility'"
+    },
+    "testbox":{
+        "runner":"/tests/runner.cfm",
+        "directory":"tests.specs",
+        "watchDelay":"1000",
+        "watchPaths":[
+            "models/**.cfc",
+            "tests/specs/**.cfc"
+        ],
+        "verbose":"false"
     }
 }

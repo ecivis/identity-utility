@@ -3,8 +3,8 @@ component {
     this.title  = "IdentityUtility";
     this.author = "Joseph Lamoree";
     this.webURL = "https://github.com/ecivis/identity-utility";
-    this.description = "A utility to assist in creating and converting unique identities.";
-    this.version = "1.0.0";
+    this.description = "A utility to assist in creating, converting, and validating unique identities.";
+    this.version = "1.1.0";
     this.modelNamespace = "IdentityUtility";
     this.dependencies = [];
 

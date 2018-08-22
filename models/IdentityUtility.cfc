@@ -39,13 +39,13 @@ component {
     public string function uuid() {
         var style = getPreferredUUIDStyle();
 
-        if (style eq "cfml") {
+        if (style == "cfml") {
             return cfmluuid();
         }
-        if (style eq "mssql") {
+        if (style == "mssql") {
             return mssqluuid();
         }
-        if (style eq "jvm") {
+        if (style == "jvm") {
             return jvmuuid();
         }
         throw(type="UnknownUUIDStyleException", message="The configured UUID style preference [#style#] is not valid.");
@@ -64,8 +64,8 @@ component {
     /**
     * Change the UUID style after initialization. If you're into that sort of thing.
     */
-    public void function setPreferredUUIDStyle(string preferredUUIDStyle required) {
-        if (listFindNoCase("jvm,cfml,mssql", arguments.preferredUUIDStyle) eq 0) {
+    public void function setPreferredUUIDStyle(required string preferredUUIDStyle) {
+        if (!structKeyExists(getSupportedStyles(), arguments.preferredUUIDStyle)) {
             throw(type="UnsupportedPreferenceException", message="The specified UUID style preference [#arguments.preferredUUIDStyle#] is not suported.");
         }
         variables.preferredUUIDStyle = arguments.preferredUUIDStyle;
@@ -76,11 +76,11 @@ component {
     * @input This may be any garbled version of a UUID and we'll do our best.
     * @desiredStyle Options are jvm, cfml, and mssql
     */
-    public string function normalizeUUID(string input required, string desiredStyle required) {
+    public string function normalizeUUID(required string input, required string desiredStyle) {
         var buff = arguments.input;
         var style = "";
 
-        if (listFindNoCase("jvm,cfml,mssql", arguments.desiredStyle) eq 0) {
+        if (!structKeyExists(getSupportedStyles(), arguments.desiredStyle)) {
             throw(type="InvalidUUIDStyleException", message="The specified UUID style preference [#arguments.desiredUUIDStyle#] is not suported.");
         }
         style = arguments.desiredStyle;
@@ -94,20 +94,65 @@ component {
         /* Grab just the hex characters */
         buff = reReplaceNoCase(buff, "[^0-9a-f]", "", "all");
 
-        if (len(buff) neq 32) {
+        if (len(buff) != 32) {
             throw(type="InvalidUUIDException", message="A UUID should have 32 characers of hex. Yours [#arguments.input#] did not.");
         }
 
-        if (style eq "cfml") {
+        if (style == "cfml") {
             return ucase(left(buff, 8) & "-" & mid(buff, 9, 4) & "-" & mid(buff, 13, 4) & "-" & right(buff, 16));
         }
-        if (style eq "mssql") {
+        if (style == "mssql") {
             return ucase(left(buff, 8) & "-" & mid(buff, 9, 4) & "-" & mid(buff, 13, 4) & "-" & mid(buff, 17, 4) & "-" & right(buff, 12));
         }
-        if (style eq "jvm") {
+        if (style == "jvm") {
             return lcase(left(buff, 8) & "-" & mid(buff, 9, 4) & "-" & mid(buff, 13, 4) & "-" & mid(buff, 17, 4) & "-" & right(buff, 12));
         }
         return "";
+    }
+
+    /**
+    * Returns a boolean value representing the validity of the input for the given style. Unexpected case-sensitivity does not cause a validation failure.
+    * @input A string to evaluate for the specified style
+    * @style Options are jvm, cfml, and mssql
+    */
+    public boolean function validateUUID(required string input, required string style) {
+        if (!structKeyExists(getSupportedStyles(), arguments.style)) {
+            throw(type="UnsupportedStyleException", message="The specified UUID style [#arguments.preferredUUIDStyle#] is not suported.");
+        }
+
+        if (reFindNoCase("[^-0-9a-f]", arguments.input)) {
+            return false;
+        }
+        if (arguments.style == "jvm" || arguments.style == "mssql") {
+            if (len(arguments.input) != 36) {
+                return false;
+            }
+            if (reFindNoCase("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", arguments.input) != 1) {
+                return false;
+            }
+        }
+        if (arguments.style == "cfml" && len(arguments.input) != 36) {
+            if (len(arguments.input) != 35) {
+                return false;
+            }
+            if (reFindNoCase("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{16}$", arguments.input) != 1) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private struct function getSupportedStyles() {
+        if (structKeyExists(variables, "_supportedStyles")) {
+            return variables._supportedStyles;
+        }
+        variables._supportedStyles = {
+            "jvm": 1,
+            "cfml": 1,
+            "mssql": 1
+        };
+        return variables._supportedStyles;
     }
 
 }

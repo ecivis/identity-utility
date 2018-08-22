@@ -50,6 +50,17 @@ component extends="testbox.system.BaseSpec" {
                 expect(reFind("[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}", identityUtility.normalizeUUID(mess, "mssql"))).toBe(1);
             });
 
+            it("can validate identities", function () {
+                expect(identityUtility.validateUUID("foo", "cfml")).toBe(false);
+                expect(identityUtility.validateUUID(createUUID(), "cfml")).toBe(true);
+
+                expect(identityUtility.validateUUID("43dc4b19-0342-42d2-a0a1-6909b0c7d588", "jvm")).toBe(true);
+                expect(identityUtility.validateUUID("I'm Perfectly Calm, Dude", "jvm")).toBe(false);
+
+                expect(identityUtility.validateUUID("43DC4B19-0342-42D2-A0A1-6909B0C7D588", "mssql")).toBe(true);
+                expect(identityUtility.validateUUID("Calmer Than You Are", "mssql")).toBe(false);
+            });
+
         });
     };
 
